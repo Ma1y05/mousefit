@@ -1,0 +1,20 @@
+<section class="container" id="guides">
+    <h2>그립 방식 알아보기</h2>
+    <div class="guide-grid">
+      <article class="guide">
+        <img src="images/grip_palm.jpg" alt="팜 그립" style="width: 100%; border-radius: 8px; margin-bottom: 12px;">
+        <h3> 팜 그립</h3>
+        <p class="muted">손바닥과 손가락을 마우스에 밀착하는 방식.</p>
+      </article>
+      <article class="guide">
+        <img src="images/grip_claw.jpg" alt="클로 그립" style="width: 100%; border-radius: 8px; margin-bottom: 12px;">
+        <h3> 클로 그립</h3>
+        <p class="muted">손가락을 구부려 마우스를 잡는 방식.</p>
+      </article>
+      <article class="guide">
+        <img src="images/grip_fingertip.jpg" alt="핑거팁 그립" style="width: 100%; border-radius: 8px; margin-bottom: 12px;">
+        <h3> 핑거팁 그립</h3>
+        <p class="muted">손가락 끝으로 마우스를 조작하는 방식.</p>
+      </article>
+    </div>
+  </section>
