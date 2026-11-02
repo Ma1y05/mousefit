@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MouseFit - find the mouse/title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      background: #f7f8fc;
+      color: #20243a;
+      line-height: 1.6;
+    }
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 18px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 25px; font-weight: bold; }
+    .logo span { color: #2812d3; }
+    nav a {
+      margin-left: 18px;
+      text-decoration: none;
+      color: #555b70;
+    }
+    .hero {
+      text-align: center;
+      padding: 75px 20px;
+      background: linear-gradient(135deg, #eeecff, #ffffff);
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.2;
+      margin: 12px 0;
+    }
+    .hero p { color: #666b7c; }
+    .button {
+      background: #6959e8;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 22px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .button:hover { background: #5142cb; }
+    .container { max-width: 1000px; width: 90%; margin: auto; }
+    section { padding: 45px 0; }
+    .panel {
+      background: white;
+      padding: 28px;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+    label, .label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d6d9e3;
+      border-radius: 9px;
+      background: white;
+      font-size: 15px;
+    }
+    .grips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .grips label {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px 5px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .grips input {
+      width: auto;
+      margin-right: 5px;
+    }
+    .full { grid-column: 1 / -1; }
+    .submit { margin-top: 24px; width: 100%; }
+    #error { color: #c62828; margin-top: 10px; }
+    #results { display: none; }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .product {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 15px;
+      padding: 20px;
+    }
+    .mouse {
+      text-align: center;
+      font-size: 55px;
+      background: #efedff;
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .tag {
+      display: inline-block;
+      background: #eeecff;
+      color: #5142cb;
+      padding: 4px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+    .muted { color: #707587; font-size: 14px; }
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+    .guide {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+    }
+    footer {
+      background: #20243a;
+      color: white;
+      padding: 28px 7%;
+      font-size: 13px;
+    }
+    @media(max-width: 700px) {
+      .grid, .products, .guide-grid { grid-template-columns: 1fr; }
+      .full { grid-column: auto; }
+      header { padding: 15px 5%; }
+      nav a { margin-left: 8px; font-size: 13px; }
+      .panel { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo">Mouse<span>Fit</span></a>
+  <nav>
+    <a href="#recommend">마우스 추천</a>
+    <a href="#guides">그립 가이드</a>
+  </nav>
+</header>
+
+<main>
+  <div class="hero">
+    <p>FIND YOUR PERFECT MOUSE</p>
+    <h1>내 손에 맞는 마우스,<br>찾아보세요.</h1>
+    <p>손 크기와 그립 방식에 따라 마우스를 추천해 드립니다.</p>
+    <button class="button" onclick="goToForm()">추천 시작하기 →</button>
+  </div>
+
+  <section class="container" id="recommend">
+    <h2>find the mouse</h2>
+    <p class="muted">정보를 입력하세요</p>
+
+    <div class="panel">
+      <form id="recommendForm">
+        <div class="grid">
+          <div>
+            <label for="length">손 길이 (cm)</label>
+            <input id="length" type="number" min="10" max="25"
+              step="0.1" placeholder="예: 18" required>
+            <p class="muted">손목 주름부터 가운데 손가락 끝까지</p>
+          </div>
+
+          <div>
+            <label for="width">손 너비 (cm)</label>
+            <input id="width" type="number" min="5" max="15"
+              step="0.1" placeholder="예: 9" required>
+            <p class="muted">엄지를 제외한 손바닥의 가장 넓은 부분</p>
+          </div>
+
+          <div class="full">
+            <span class="label">그립 방식</span>
+            <div class="grips">
+              <label><input type="radio" name="grip"
+                value="palm" checked> 팜 그립 ✋</label>
+              <label><input type="radio" name="grip"
+                value="claw"> 클로 그립 🖐️</label>
+              <label><input type="radio" name="grip"
+                value="fingertip"> 핑거팁 🤏</label>
+            </div>
+          </div>
+
+          <div>
+            <label for="purpose">사용 목적</label>
+            <select id="purpose">
+              <option value="fps">FPS 게임</option>
+              <option value="work">사무·일반 작업</option>
+              <option value="all">게임과 작업 모두</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="budget">예산</label>
+            <select id="budget">
+              <option value="50000">5만 원 이하</option>
+              <option value="100000" selected>10만 원 이하</option>
+              <option value="200000">20만 원 이하</option>
+              <option value="999999">가격 제한 없음</option>
+            </select>
+          </div>
+
+          <div class="full">
+            <label for="weight">무게 선호</label>
+            <select id="weight">
+              <option value="light">가벼운 마우스 (70g 이하)</option>
+              <option value="any" selected>무게 상관없음</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="button submit" type="submit">
+          마우스 추천받기
+        </button>
+        <div id="error" role="alert"></div>
+      </form>
+    </div>
+  </section>
+
+  <section class="container" id="results">
+    <h2>추천 결과</h2>
+    <p class="muted" id="summary"></p>
+    <div class="products" id="products"></div>
+    <p class="muted">
+      ※ 추천은 참고용이며 실제 착용감은 개인의 손 모양과 취향에 따라 달라집니다.
+    </p>
+  </section>
+
+  <section class="container" id="guides">
+    <h2>그립 방식 알아보기</h2>
+    <div class="guide-grid">
+      <article class="guide">
+        <h3>✋ 팜 그립</h3>
+        <p class="muted">손바닥과 손가락을 마우스에 밀착하는 방식.</p>
+      </article>
+      <article class="guide">
+        <h3>🖐️ 클로 그립</h3>
+        <p class="muted">손가락을 구부려 마우스를 잡는 방식.</p>
+      </article>
+      <article class="guide">
+        <h3>🤏 핑거팁 그립</h3>
+        <p class="muted">손가락 끝으로 마우스를 조작하는 방식.</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <strong>MouseFit</strong>
+  <p>나에게 맞는 마우스를 찾기 위한 정보 사이트.</p>
+  <p>현재 제품 정보는 테스트용 예시 데이터입니다.</p>
+</footer>
+
+<script>
+  // 아래 제품들은 실제 판매 제품이 아닌 가상 예시입니다.
+  const mice = [
+    {
+      name: "컴팩트 경량형 예시",
+      length: 115, width: 60, height: 37,
+      weight: 58, price: 45000,
+      grips: ["claw", "fingertip"],
+      purposes: ["fps"],
+      description: "작고 가벼운 형태의 테스트 제품."
+    },
+    {
+      name: "밸런스형 예시",
+      length: 120, width: 63, height: 40,
+      weight: 75, price: 75000,
+      grips: ["palm", "claw"],
+      purposes: ["fps", "all"],
+      description: "게임과 일반 사용을 고려한 테스트 제품."
+    },
+    {
+      name: "넓은 손바닥 지지형 예시",
+      length: 128, width: 69, height: 43,
+      weight: 92, price: 95000,
+      grips: ["palm"],
+      purposes: ["work", "all"],
+      description: "손바닥 지지를 고려한 테스트 제품."
+    },
+    {
+      name: "미니 무선형 예시",
+      length: 108, width: 58, height: 35,
+      weight: 65, price: 39000,
+      grips: ["claw", "fingertip"],
+      purposes: ["work", "fps", "all"],
+      description: "작은 외형을 고려한 테스트 제품."
+    },
+    {
+      name: "대형 인체공학형 예시",
+      length: 132, width: 72, height: 46,
+      weight: 105, price: 150000,
+      grips: ["palm"],
+      purposes: ["work", "all"],
+      description: "큰 외형의 테스트 제품."
+    }
+  ];
+
+  const gripNames = {
+    palm: "팜 그립",
+    claw: "클로 그립",
+    fingertip: "핑거팁"
+  };
+
+  function goToForm() {
+    document.getElementById("recommend").scrollIntoView({
+      behavior: "smooth"
+    });
+  }
+
+  document.getElementById("recommendForm")
+    .addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const error = document.getElementById("error");
+      error.textContent = "";
+
+      const handLength = Number(document.getElementById("length").value);
+      const handWidth = Number(document.getElementById("width").value);
+
+      if (handLength < 10 || handLength > 25 ||
+          handWidth < 5 || handWidth > 15) {
+        error.textContent =
+          "손 길이는 10~25cm, 손 너비는 5~15cm로 입력해 주세요.";
+        return;
+      }
+
+      const grip = document.querySelector(
+        'input[name="grip"]:checked'
+      ).value;
+      const purpose = document.getElementById("purpose").value;
+      const budget = Number(document.getElementById("budget").value);
+      const weight = document.getElementById("weight").value;
+
+      const idealLength = handLength * 6.5;
+      const idealWidth = handWidth * 6.8;
+
+      const results = mice
+        .filter(mouse => mouse.price <= budget)
+        .map(mouse => {
+          let score = 0;
+          const reasons = [];
+
+          if (mouse.grips.includes(grip)) {
+            score += 4;
+            reasons.push(gripNames[grip] + " 고려");
+          }
+
+          const lengthDiff = Math.abs(mouse.length - idealLength);
+          const widthDiff = Math.abs(mouse.width - idealWidth);
+
+          score += Math.max(0, 3 - lengthDiff / 8);
+          score += Math.max(0, 3 - widthDiff / 7);
+
+          if (mouse.purposes.includes(purpose)) {
+            score += 2;
+            reasons.push("사용 목적 고려");
+          }
+
+          if (weight === "light") {
+            if (mouse.weight <= 70) {
+              score += 3;
+              reasons.push("가벼운 무게");
+            } else {
+              score -= 3;
+            }
+          }
+
+          return { ...mouse, score, reasons };
+        })
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3);
+
+      document.getElementById("summary").textContent =
+        `${handLength}cm 손 길이 · ${handWidth}cm 손 너비 · ${gripNames[grip]}`;
+
+      const products = document.getElementById("products");
+      products.replaceChildren();
+
+      results.forEach((mouse, index) => {
+        const card = document.createElement("article");
+        card.className = "product";
+
+        const visual = document.createElement("div");
+        visual.className = "mouse";
+        visual.textContent = "🖱️";
+
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = `추천 후보 ${index + 1}`;
+
+        const title = document.createElement("h3");
+        title.textContent = mouse.name;
+
+        const description = document.createElement("p");
+        description.className = "muted";
+        description.textContent = mouse.description;
+
+        const specs = document.createElement("p");
+        specs.textContent =
+          `크기: ${mouse.length} × ${mouse.width} × ${mouse.height}mm`;
+
+        const weightText = document.createElement("p");
+        weightText.textContent = `무게: ${mouse.weight}g`;
+
+        const priceText = document.createElement("p");
+        priceText.textContent =
+          `예시 가격: ${mouse.price.toLocaleString("ko-KR")}원`;
+
+        const reason = document.createElement("p");
+        reason.className = "muted";
+        reason.textContent = "추천 참고: " +
+          (mouse.reasons.join(", ") || "전체 조건 비교");
+
+        card.append(
+          visual, tag, title, description,
+          specs, weightText, priceText, reason
+        );
+
+        products.appendChild(card);
+      });
+
+      document.getElementById("results").style.display = "block";
+      document.getElementById("results").scrollIntoView({
+        behavior: "smooth"
+      });
+    });
+</script>
+
+</body>
+</html>
